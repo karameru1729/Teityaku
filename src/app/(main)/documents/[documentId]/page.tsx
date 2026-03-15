@@ -1,6 +1,8 @@
+"use client";
 // app/documents/[id]/page.tsx
 import { useEditor, EditorContent } from '@tiptap/react'
 import { TextStyleKit } from '@tiptap/extension-text-style'
+import EditorMenuBar from '@/../components/EditorMenuBar'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
 
@@ -19,6 +21,8 @@ export default async function DocumentPage({
       <h1 className="text-2xl font-bold mb-4">
         ドキュメントID: {id}
       </h1>
+      <EditorMenuBar editor={editor} />
+      <EditorContent editor={editor} />
       <p>ここの中身はURLごとに変わります。</p>
     </div>
   );

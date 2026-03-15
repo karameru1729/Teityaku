@@ -5,7 +5,7 @@ import { useEditorState } from '@tiptap/react'
 import React from "react"
 import { menuBarStateSelector } from './EditorMenuBarState'
 
-export default function EditorMenuBar({ editor } : { editor: Editor | null }){
+export default function EditorMenuBar({ editor } : { editor: Editor}){
     const editorState = useEditorState({
         editor,
         selector: menuBarStateSelector,
