@@ -9,6 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/*サイドバープロバイダーでは用途が限定的すぎるので、修正する必要がある*/}
         <SidebarProvider>
           {children}
         </SidebarProvider>

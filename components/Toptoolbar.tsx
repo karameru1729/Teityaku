@@ -5,7 +5,7 @@ export default function Toptoolbar(){
     const { toggleSidebar, openSidebar, closeSidebar} = useSidebar();
 
     return (
-        <div className="bg-zinc-800 block-[1.3rem] w-full top-0 left-0 flex justify-start">
+        <div className="bg-zinc-800 h-6 w-full top-0 left-0 flex justify-start">
           <svg className="hidden">
             <symbol id="icon-sidebar" viewBox="0 0 256 256">
               <path fill="#e2dadad6" d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16ZM64 152H48a8 8 0 0 1 0-16h16a8 8 0 0 1 0 16Zm0-32H48a8 8 0 0 1 0-16h16a8 8 0 0 1 0 16Zm0-32H48a8 8 0 0 1 0-16h16a8 8 0 0 1 0 16Zm152 112H88V56h128v144Z"/>
