@@ -20,7 +20,7 @@ export default function EditorMenuBar({ editor } : { editor: Editor}){
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editorState.canBold}
-          className={editorState.isBold ? 'is-active' : ''}
+          className={`bg-zinc-800 ${editorState.isBold ? 'is-active' : ''} h-10 flex flex-col overflow-hidden transition-all duration-300`}
         >
           Bold
         </button>

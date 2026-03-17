@@ -1,10 +1,9 @@
-"use client";
 // app/documents/[id]/page.tsx
+import dynamic from 'next/dynamic'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { TextStyleKit } from '@tiptap/extension-text-style'
-import EditorMenuBar from '@/../components/EditorMenuBar'
 import StarterKit from '@tiptap/starter-kit'
-import React from 'react'
+import EditorMenuBarWrapper from '@/../components/EditorMenuBarWrapper'
 
 // 非同期コンポーネントにするため `async` をつけます
 export default async function DocumentPage({
@@ -15,14 +14,12 @@ export default async function DocumentPage({
   // awaitを使ってURLのパラメータ（id）を取得する
   const { id } = await params;
   const extensions = [StarterKit, TextStyleKit]
-  const editor = useEditor({ extensions, content:'<h2> Hi there,</h2>'})
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">
         ドキュメントID: {id}
       </h1>
-      <EditorMenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorMenuBarWrapper/>
       <p>ここの中身はURLごとに変わります。</p>
     </div>
   );
