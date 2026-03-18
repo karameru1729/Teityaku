@@ -8,7 +8,7 @@ export default function DocumentLayout({
   return (
     <>
       <PositionBar/>
-      <div className="flex flex-col bg-red-500">{children}</div>
+      <div className="flex flex-col">{children}</div>
     </>
   );
 }

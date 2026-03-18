@@ -12,7 +12,7 @@ export default function SidebarButton({ Icon, Item }:SidebarButtonProps) {
 
     return(
         <div className="flex items-center justify-center"> 
-            <button className="whitespace-nowrap flex gap-2 border border-transparent rounded-md hover:bg-zinc-600 p-[1px] w-46 h-6" type="button">
+            <button className="whitespace-nowrap flex gap-2 border border-transparent rounded-md hover:bg-zinc-600 p-[1px] w-46 h-6 items-center"  type="button">
                 <Icon width={15} height={15} fill="#e2dadad6" />
                 <span className="text-sm text-[#e2dadad6] select-none">{Item}</span>
             </button>

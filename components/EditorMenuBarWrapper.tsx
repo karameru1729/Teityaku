@@ -28,10 +28,7 @@ export default function EditorWrapper() {
   return (
     <div className="editor-container">
       {/* editorが確実に存在するのでTypeScriptに怒られません */}
-      <EditorMenuBar editor={editor} />
-      
-      {/* 4. これがないと、文字を入力する場所が表示されません！ */}
-      <EditorContent editor={editor} />
+      <EditorMenuBar/>
     </div>
   );
 }
