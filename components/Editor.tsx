@@ -1,53 +1,88 @@
 'use client'
 
-import { TextStyleKit } from '@tiptap/extension-text-style'
-import { EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import React from 'react'
-import EditorMenuBar from './EditorMenuBar'
+import { useEffect, useState, useRef } from 'react';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
-const extensions = [TextStyleKit, StarterKit]
+export default function CustomEditor() {
+  // ボタンの表示位置（トップとレフト）を管理
+  const [buttonPos, setButtonPos] = useState<{ top: number; left: number } | null>(null);
+  
+  // エディタ全体を囲むコンテナの参照を取得（座標計算の基準にするため）
+  const editorContainerRef = useRef<HTMLDivElement>(null);
 
-export default () => {
   const editor = useEditor({
-    extensions,
+    extensions: [StarterKit],
+    content: '<p>ここに入力...</p><p>次の行</p><p>その次の行</p>',
     immediatelyRender: false,
-    content: `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you'd probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That's a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn't that great? And all of that is editable. But wait, there's more. Let's try a code block:
-</p>
-<pre><code class="language-css">body {
-  display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It's only the tip of the iceberg though. Give it a try and click a little bit around. Don't forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that's amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`,
-  })
+  });
+
+  useEffect(() => {
+    if (!editor || !editorContainerRef.current) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      // 1. マウスの画面上の座標を取得
+      const coords = { left: event.clientX, top: event.clientY };
+      const pos = editor.view.posAtCoords(coords);
+
+      if (pos) {
+        // 2. その位置にあるDOMを取得
+        let domNode = editor.view.domAtPos(pos.pos).node;
+
+        // 【重要】もし取得したのが「テキスト(文字)」だったら、その親要素（pタグなど）をターゲットにする
+        if (domNode.nodeType === 3) { // 3 = テキストノード
+          domNode = domNode.parentNode as Node;
+        }
+
+        // 3. HTML要素として座標を計算
+        if (domNode instanceof HTMLElement) {
+          const nodeRect = domNode.getBoundingClientRect();
+          const containerRect = editorContainerRef.current!.getBoundingClientRect();
+
+          // 【重要】「親コンテナのトップ」から「現在の行のトップ」までの引き算をして、正しいY座標を出す
+          const relativeTop = nodeRect.top - containerRect.top;
+          
+          setButtonPos({ 
+            top: relativeTop, 
+            left: -30 // 左に30pxはみ出させる
+          });
+        }
+      } else {
+        // エディタの枠外などにマウスがいったらボタンを隠す
+        setButtonPos(null);
+      }
+    };
+
+    // window全体ではなく、エディタのコンテナの中だけでマウスの動きを監視する
+    const container = editorContainerRef.current;
+    container.addEventListener('mousemove', handleMouseMove);
+    
+    // クリーンアップ
+    return () => container.removeEventListener('mousemove', handleMouseMove);
+  }, [editor]);
+
+  if (!editor) return null;
 
   return (
-    <>
+    // 【重要】ここに ref と relative を設定します
+    <div ref={editorContainerRef} className="relative max-w-2xl mx-auto mt-10 p-4 border border-gray-300 min-h-[300px]">
+      
+      {/* アクションボタン */}
+      {buttonPos && (
+        <button 
+          className="absolute w-6 h-6 bg-gray-200 rounded text-gray-600 flex items-center justify-center cursor-grab hover:bg-gray-300 transition-colors"
+          style={{ 
+            top: `${buttonPos.top}px`, 
+            left: `${buttonPos.left}px` 
+          }}
+        >
+          ⋮⋮
+        </button>
+      )}
+
+      {/* エディタ本体 */}
       <EditorContent editor={editor} />
-      <EditorMenuBar/>
-    </>
-  )
+      
+    </div>
+  );
 }
