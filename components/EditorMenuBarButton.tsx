@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import { useRef, useEffect} from 'react';
 interface ButtonProps {
     Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     Item: string;
