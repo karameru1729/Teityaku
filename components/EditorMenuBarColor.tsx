@@ -1,8 +1,18 @@
 import EditorMenuBarButton from "./EditorMenuBarButton";
 import homeIcon from "../public/icons/home.svg";
 import { useState, useEffect } from "react";
+import { menuBarStateSelector } from './EditorMenuBarTextState'
+import { useEditorState } from '@tiptap/react'
+import type {Editor} from '@tiptap/core'
 
-export function EditorMenuBarColor({isOpen, resetSelectedButtonID}: {isOpen: boolean; resetSelectedButtonID: boolean}){
+export function EditorMenuBarColor({editor, isOpen, resetSelectedButtonID}: {editor: Editor; isOpen: boolean; resetSelectedButtonID: boolean}){
+     if (!editor) {
+        return null; 
+    }
+    const editorState = useEditorState({
+        editor,
+        selector: menuBarStateSelector,
+    })
     const [selectedButtonID, setSelectedButtonID] = useState<number | null>(null);
     const Buttons = [
         {id: 1, item: "テキスト", icon: homeIcon},

@@ -3,26 +3,55 @@
 import { useEffect, useState, useRef } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import EditorMenuBar from './EditorMenuBar';
+import Paragraph from '@tiptap/extension-paragraph';
+
+const CustomDivBlock = Paragraph.extend({
+  // Tiptap内部での名前を 'paragraph' のままにしておくことで、
+  // Enterキーを押した時の「標準の改行先」として自動的に認識されます。
+  name: 'paragraph',
+
+  parseHTML() {
+    return [
+      { tag: 'div' },
+      { tag: 'p' }, // 既存のデータに<p>が混ざっていても読み込めるようにしておくのが安全です
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    // 画面に出力する時は <div> にする
+    return ['div', HTMLAttributes, 0];
+  },
+});
 
 export default function CustomEditor() {
   const [buttonPos, setButtonPos] = useState<{ top: number; left: number } | null>(null);
+  const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const editorContainerRef = useRef<HTMLDivElement>(null);
-
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: '<div>ここに入力...</div>',
+    extensions: [StarterKit.configure({
+        // StarterKitに最初から入っている標準の<p>を「無効化」する
+        paragraph: false, 
+      }),
+      // 4. 代わりに、上で作ったカスタム版（<div>版）を追加する
+      CustomDivBlock,],
+    content: '<div>ここから入力</div>',
     immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        // フォーカス時の枠線を消し、必要に応じてエディタ全体のスタイルもここに書けます
+        class: 'focus:outline-none', 
+      },
+    },
   });
 
   useEffect(() => {
     if (!editor || !editorContainerRef.current) return;
-
     const container = editorContainerRef.current;
-
     const handleMouseMove = (event: MouseEvent) => {
+      if (isMenuBarOpen) return;
       const coords = { left: event.clientX, top: event.clientY };
       const pos = editor.view.posAtCoords(coords);
-
       if (pos) {
         let domNode = editor.view.domAtPos(pos.pos).node;
 
@@ -34,7 +63,6 @@ export default function CustomEditor() {
           const nodeRect = domNode.getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
           const relativeTop = nodeRect.top - containerRect.top;
-          
           setButtonPos({ 
             top: relativeTop, 
             left: -30 // 左に30pxはみ出させる
@@ -44,23 +72,38 @@ export default function CustomEditor() {
     };
 
     const handleMouseLeave = () => {
-      setButtonPos(null);
+      if (!isMenuBarOpen) {
+        setButtonPos(null);
+        setIsMenuBarOpen(false); // エディタからマウスが離れたらメニューバーも閉じる（必要に応じて調整）
+      }
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
+    const handleClickOutside = (event: MouseEvent) => {
+     if (
+        editorContainerRef.current &&
+        !editorContainerRef.current.contains(event.target as Node)
+      ) {
+        // メニューを閉じて、ボタンも非表示にする
+        setIsMenuBarOpen(false);
+        setButtonPos(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    container.addEventListener('mousemove', handleMouseMove);   
     container.addEventListener('mouseleave', handleMouseLeave);
+
     
     return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [editor]);
+  }, [editor,isMenuBarOpen]);
 
   if (!editor) return null;
 
   return (
-    <div ref={editorContainerRef} className="relative max-w-2xl mx-auto mt-10 p-4 border border-gray-300 min-h-[300px]">
-      
+    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl border border-[#e2dadad6] mx-auto mt-10 p-2">
       {/* アクションボタン */}
       {buttonPos && (
         // 【修正ポイント】
@@ -74,17 +117,20 @@ export default function CustomEditor() {
             height: '24px' // ボタンと同じ高さ（必要に応じて調整）
           }}
         >
-          <button 
-            className="w-6 h-6 bg-gray-200 rounded text-gray-600 flex items-center justify-center cursor-grab hover:bg-gray-300 transition-colors"
-            onClick={() => alert('ボタンが押せました！')} // 確認用
-          >
-            ⋮⋮
-          </button>
+          <div className="flex flex-row items-center gap-1">
+            <button 
+              className="w-6 h-6 bg-zinc-700 rounded text-zinc-500 flex items-center justify-center cursor-grab hover:bg-zinc-600 transition-colors"
+              onClick={() => setIsMenuBarOpen(!isMenuBarOpen)} // 確認用
+            >
+              ⋮⋮
+            </button>
+            <EditorMenuBar editor={editor} isOpen={isMenuBarOpen} />
+          </div>
         </div>
       )}
 
       {/* エディタ本体 */}
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor}/>
     </div>
   );
 }
