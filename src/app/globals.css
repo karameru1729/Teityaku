@@ -37,3 +37,46 @@ body {
     border-radius: 9999px; /* 丸みを持たせる */
   }
 }
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror h4 {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* コードブロック全体の枠（<pre>） */
+.ProseMirror pre {
+  background-color: black; /* slate-800 のような暗い色 */
+  color: #fffaff; /* 文字は白系 */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto; /* 長いコードがはみ出さないように横スクロール */
+  font-family: 'Courier New', Courier, monospace; /* 等幅フォント */
+  line-height: 1.5;
+}
+
+/* コードブロック内の文字（<code>） */
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.7rem;
+}

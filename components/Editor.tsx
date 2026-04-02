@@ -35,7 +35,7 @@ export default function CustomEditor() {
       }),
       // 4. 代わりに、上で作ったカスタム版（<div>版）を追加する
       CustomDivBlock,],
-    content: '<div>ここから入力</div>',
+    content: `<div>あいうえお</div>`,
     immediatelyRender: false,
     editorProps: {
       attributes: {
@@ -69,7 +69,7 @@ export default function CustomEditor() {
           });
         }
       }
-    };
+    }
 
     const handleMouseLeave = () => {
       if (!isMenuBarOpen) {
@@ -103,7 +103,7 @@ export default function CustomEditor() {
   if (!editor) return null;
 
   return (
-    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl border border-[#e2dadad6] mx-auto mt-10 p-2">
+    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl mx-auto mt-10 p-2">
       {/* アクションボタン */}
       {buttonPos && (
         // 【修正ポイント】
@@ -130,7 +130,7 @@ export default function CustomEditor() {
       )}
 
       {/* エディタ本体 */}
-      <EditorContent editor={editor}/>
+      <EditorContent onClick={() => {setIsMenuBarOpen(false)}} editor={editor}/>
     </div>
   );
 }

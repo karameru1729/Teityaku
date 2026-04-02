@@ -9,10 +9,6 @@ export function EditorMenuBarColor({editor, isOpen, resetSelectedButtonID}: {edi
      if (!editor) {
         return null; 
     }
-    const editorState = useEditorState({
-        editor,
-        selector: menuBarStateSelector,
-    })
     const [selectedButtonID, setSelectedButtonID] = useState<number | null>(null);
     const Buttons = [
         {id: 1, item: "テキスト", icon: homeIcon},

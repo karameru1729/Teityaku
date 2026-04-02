@@ -45,8 +45,8 @@ export default function EditorMenuBar({isOpen, editor}:{isOpen: boolean; editor:
             isHovered={selectedButtonID === 4 ? true : false} />
         </div>
       </div>
-      <EditorMenuBarText editor={editor} isOpen={selectedButtonID === 1 ? true : false} resetSelectedButtonID={selectedButtonID !== 1 ? true : false} />
-      <EditorMenuBarColor editor={editor} isOpen={selectedButtonID === 2 ? true : false} resetSelectedButtonID={selectedButtonID !== 2 ? true : false} />
+      <EditorMenuBarText editor={editor} isOpen={selectedButtonID === 1 && isOpen ? true : false} resetSelectedButtonID={selectedButtonID !== 1 ? true : false} />
+      <EditorMenuBarColor editor={editor} isOpen={selectedButtonID === 2 && isOpen ? true : false} resetSelectedButtonID={selectedButtonID !== 2 ? true : false} />
     </div>
      
   )
