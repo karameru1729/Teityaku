@@ -5,6 +5,7 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import Paragraph from '@tiptap/extension-paragraph';
+import { TrailingNode } from '@tiptap/extensions/trailing-node';
 
 const CustomDivBlock = Paragraph.extend({
   // Tiptap内部での名前を 'paragraph' のままにしておくことで、
@@ -34,7 +35,7 @@ export default function CustomEditor() {
         paragraph: false, 
       }),
       // 4. 代わりに、上で作ったカスタム版（<div>版）を追加する
-      CustomDivBlock,],
+      CustomDivBlock,TrailingNode],
     content: `<div>あいうえお</div>`,
     immediatelyRender: false,
     editorProps: {
@@ -103,7 +104,7 @@ export default function CustomEditor() {
   if (!editor) return null;
 
   return (
-    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl mx-auto mt-10 p-2">
+    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl border border-white mx-auto mt-10 p-2">
       {/* アクションボタン */}
       {buttonPos && (
         // 【修正ポイント】

@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "'": "file:tiptap/extensions/trailing-node'",
     "@tiptap/extension-highlight": "^3.20.1",
     "@tiptap/extension-text-align": "^3.20.1",
     "@tiptap/extension-text-style": "^3.20.1",
+    "@tiptap/extensions": "^3.22.1",
     "@tiptap/markdown": "^3.20.1",
     "@tiptap/pm": "^3.20.1",
     "@tiptap/react": "^3.20.1",

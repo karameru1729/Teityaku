@@ -12,7 +12,6 @@ export default async function DocumentPage({params}: {params: Promise<{ id: stri
 {
   // awaitを使ってURLのパラメータ（id）を取得する
   const { id } = await params;
-  const extensions = [StarterKit, TextStyleKit]
   return (
     <div className="p-8">
       <EditorWrapper/>

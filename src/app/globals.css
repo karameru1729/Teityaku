@@ -41,25 +41,25 @@ body {
 .ProseMirror h1 {
   font-size: 2rem;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 .ProseMirror h2 {
   font-size: 1.8rem;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 .ProseMirror h3 {
   font-size: 1.6rem;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 .ProseMirror h4 {
   font-size: 1.4rem;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 /* コードブロック全体の枠（<pre>） */
@@ -71,6 +71,7 @@ body {
   overflow-x: auto; /* 長いコードがはみ出さないように横スクロール */
   font-family: 'Courier New', Courier, monospace; /* 等幅フォント */
   line-height: 1.5;
+  margin-top: 5.0;
 }
 
 /* コードブロック内の文字（<code>） */

@@ -11,13 +11,12 @@ export function EditorMenuBarText({editor, isOpen, resetSelectedButtonID}: {edit
     }
     const [selectedButtonID, setSelectedButtonID] = useState<number | null>(null);
     const Buttons = [
-        {id: 1, item: "ボールド", icon: homeIcon, action: () => editor.chain().focus().toggleBold().run()},
-        {id: 2, item: "見出し１", icon: homeIcon, action: () => editor.chain().focus().toggleHeading({level:1}).run()},
-        {id: 3, item: "見出し２", icon: homeIcon, action: () => editor.chain().focus().toggleHeading({level:2}).run()},
-        {id: 4, item: "見出し３", icon: homeIcon, action: () => editor.chain().focus().toggleHeading({level:3}).run()},
-        {id: 5, item: "見出し４", icon: homeIcon, action: () => editor.chain().focus().toggleHeading({level:4}).run()},
-        {id: 6, item: "コード", icon: homeIcon, action: () => editor.chain().blur().selectNodeForward().toggleCodeBlock().run()},
-        {id: 7, item: "リスト", icon: homeIcon, action: () => editor.chain().focus().toggleOrderedList().run()},
+        {id: 1, item: "見出し１", icon: homeIcon, action: () => editor.chain().command(({tr}) => {tr.setMeta('skipTrailingNode', true); return true;}).toggleHeading({level:1}).run()},
+        {id: 2, item: "見出し２", icon: homeIcon, action: () => editor.chain().command(({tr}) => {tr.setMeta('skipTrailingNode', true); return true;}).toggleHeading({level:2}).run()},
+        {id: 3, item: "見出し３", icon: homeIcon, action: () => editor.chain().command(({tr}) => {tr.setMeta('skipTrailingNode', true); return true;}).toggleHeading({level:3}).run()},
+        {id: 4, item: "見出し４", icon: homeIcon, action: () => editor.chain().command(({tr}) => {tr.setMeta('skipTrailingNode', true); return true;}).toggleHeading({level:4}).run()},
+        {id: 5, item: "コード", icon: homeIcon, action: () => editor.chain().command(({tr}) => {tr.setMeta('skipTrailingNode', true); return true;}).toggleCodeBlock().run()},
+        {id: 6, item: "リスト", icon: homeIcon, action: () => editor.chain().focus().toggleOrderedList().run()},
          ];
     useEffect(() => {
         if (resetSelectedButtonID) {
