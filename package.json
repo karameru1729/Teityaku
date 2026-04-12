@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "'": "file:tiptap/extensions/trailing-node'",
+    "@auth/drizzle-adapter": "^1.11.1",
+    "@libsql/client": "^0.17.2",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.1",
     "@tiptap/extension-highlight": "^3.20.1",
@@ -20,23 +22,31 @@
     "@tiptap/pm": "^3.20.1",
     "@tiptap/react": "^3.20.1",
     "@tiptap/starter-kit": "^3.20.1",
+    "@tursodatabase/serverless": "^1.0.0",
+    "dotenv": "^17.4.1",
+    "drizzle-orm": "^0.45.2",
     "next": "16.1.6",
     "next-auth": "^4.24.13",
+    "nodemailer": "^7.0.13",
     "postcss": "^8.5.8",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.2.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
