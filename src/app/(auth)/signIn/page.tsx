@@ -4,7 +4,6 @@ export default function page (){
   return(
     <main className="flex-grow flex flex-col items-center justify-center py-12 relative overflow-hidden">
         <h1 className=" font-bold mb-6 text-center text-gray-900">ログイン</h1>
-
         <div className="w-full max-w-[420px] bg-white border border-gray-200 rounded-[4px] shadow-sm relative z-10 mx-4">
             <div className="flex justify-center gap-[34px] pt-8 pb-6 px-8">
                 <div className="flex flex-col items-center gap-2">
