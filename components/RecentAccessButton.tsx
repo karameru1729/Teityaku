@@ -1,6 +1,7 @@
 'use client'
-
+import HomeIcon from "../public/icons/document.svg";
 import React from 'react';
+
 interface ButtonProps {
     Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     isHovered: boolean;
@@ -8,16 +9,10 @@ interface ButtonProps {
 
 export default function RecentAccessButton(){
   return(
-    <div className="gap-3 flex flex-col items-start justify-center bg-zinc-800 border-transparent rounded-md w-35 h-35 border"> 
-      <div className="bg-red-300 flex w-8 h-8 items-center justify-center">
-        aiu
-      </div>
-      <div className="bg-blue-300 w-10 h-5">
-        Itekm
-      </div>
-      <div className="bg-green-300 w-20 h-5">
-        TimeStamp
-      </div>
+    <div className="flex flex-col my-2 justify-start bg-zinc-800 border-transparent rounded-xl w-48 h-48 border"> 
+      <HomeIcon width={36} height={36} fill="#e2dadad6" className="m-4"/> 
+      <p className="text-xl mx-2">ドキュメント</p>
+      <p className="text-md mt-10 ml-2">1日前</p>
     </div>
   );
 }
