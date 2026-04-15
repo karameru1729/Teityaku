@@ -7,7 +7,7 @@ dotenv.config({path: ".env.local"});
 export default defineConfig({
   out: "./drizzle",
   dialect: "turso",
-  schema: "./src/db/schema.tsx",
+  schema: "./src/db/schema",
   dbCredentials: {
     url: process.env.TURSO_DATABASE_URL!,
     authToken: process.env.TURSO_DATABASE_TOKEN!,

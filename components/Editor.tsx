@@ -6,6 +6,12 @@ import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import Paragraph from '@tiptap/extension-paragraph';
 import { TrailingNode } from '@tiptap/extensions/trailing-node';
+import { drizzle } from 'drizzle-orm/libsql';
+
+const db = drizzle({ connection: {
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_DATABASE_TOKEN,
+}});
 
 const CustomDivBlock = Paragraph.extend({
   // Tiptap内部での名前を 'paragraph' のままにしておくことで、
@@ -29,6 +35,12 @@ export default function CustomEditor() {
   const [buttonPos, setButtonPos] = useState<{ top: number; left: number } | null>(null);
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const editorContainerRef = useRef<HTMLDivElement>(null);
+
+  const debouncedSave = useDebouncedCallback((jsonContent) => {
+    console.log("データベースへ保存します:", jsonContent);
+    // 例: await fetch('/api/save', { method: 'POST', body: JSON.stringify(jsonContent) });
+  }, 1000);
+
   const editor = useEditor({
     extensions: [StarterKit.configure({
         // StarterKitに最初から入っている標準の<p>を「無効化」する
@@ -43,6 +55,11 @@ export default function CustomEditor() {
         // フォーカス時の枠線を消し、必要に応じてエディタ全体のスタイルもここに書けます
         class: 'focus:outline-none', 
       },
+    },
+    onUpdate: ({ editor }) => {
+      // 変更があるたびに呼ばれるが、debouncedSaveによって1秒間は実際の保存処理が保留される
+      const json = editor.getJSON();
+      debouncedSave(json);
     },
   });
 

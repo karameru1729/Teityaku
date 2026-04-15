@@ -9,14 +9,6 @@ export default function Home() {
         <p className="text-xl py-2 select-none">最近のアクセス</p>
         <SliderBar/>
       </div>
-      <div className="w-1/2 bg-zinc-900">
-        <p className="text-xl py-2 select-none">最近のアクセス</p>
-        <SliderBar/>
-      </div>
-      <div className="w-1/2 bg-zinc-900">
-        <p className="text-xl py-2 select-none">最近のアクセス</p>
-        <SliderBar/>
-      </div>
     </div>
   );
 }

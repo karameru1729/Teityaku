@@ -9,10 +9,6 @@ const client = createClient({
 });
 
 export const db = drizzle(client);
-console.log("=== Next.js データベース接続チェック ===");
-console.log("URL:", process.env.TURSO_DATABASE_URL);
-console.log("TOKEN:", process.env.TURSO_DATABASE_TOKEN ? "設定あり" : "未設定");
-console.log("====================================");
 // --- 既存の user テーブル ---
 export const users = sqliteTable("user", {
   id: text("id")
