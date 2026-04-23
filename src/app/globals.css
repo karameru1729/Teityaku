@@ -83,4 +83,28 @@ body {
   padding: 0;
   background: none;
   font-size: 0.7rem;
+}/* globals.css に追加 */
+
+/* エディタ全体の標準スタイル */
+.tiptap {
+  outline: none; /* フォーカス時の青い枠線を消す */
+}
+
+/* タイトル（一番最初のh1）のスタイル */
+.tiptap h1:first-of-type {
+  font-size: 2.0rem; /* 40px相当。非常に大きくする */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem; /* 本文との間に余白を開ける */
+  border: none;
+}
+
+/* プレースホルダー（薄い文字）のスタイル */
+.tiptap p.is-empty::before,
+.tiptap h1.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a1a1aa; /* Tailwindの zinc-400 相当 */
+  pointer-events: none;
+  height: 0;
 }

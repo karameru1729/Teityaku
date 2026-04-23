@@ -9,19 +9,23 @@ import { TrailingNode } from '@tiptap/extensions/trailing-node';
 import { drizzle } from 'drizzle-orm/libsql';
 import { documents } from '@/db/schema/documents';
 import { db } from "@/db/db";
+import { useDebouncedCallback } from 'use-debounce'; // 不足していたインポート
+import { updateDocument } from '@/app/actions'; // 作成したサーバーアクションをインポート
+import Document from '@tiptap/extension-document';
+import Placeholder from '@tiptap/extension-placeholder';
+import Heading from '@tiptap/extension-heading';
+import { DocumentStartBackspaceExtension } from './DocumentStartBackspaceExtension'
 
 const CustomDivBlock = Paragraph.extend({
   // Tiptap内部での名前を 'paragraph' のままにしておくことで、
   // Enterキーを押した時の「標準の改行先」として自動的に認識されます。
   name: 'paragraph',
-
   parseHTML() {
     return [
       { tag: 'div' },
       { tag: 'p' }, // 既存のデータに<p>が混ざっていても読み込めるようにしておくのが安全です
     ];
   },
-
   renderHTML({ HTMLAttributes }) {
     // 画面に出力する時は <div> にする
     return ['div', HTMLAttributes, 0];
@@ -33,18 +37,26 @@ export default function CustomEditor() {
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
-  const debouncedSave = useDebouncedCallback((editorJson) => {
-    await db.update(documents).set({ content: editorJson }).where(eq(documents.id, "target-document-id"));
+  const debouncedSave = useDebouncedCallback(async (editorJson) => {
+    await updateDocument("34", editorJson);
   }, 1000);
 
   const editor = useEditor({
-    extensions: [StarterKit.configure({
-        // StarterKitに最初から入っている標準の<p>を「無効化」する
-        paragraph: false, 
+    extensions: [
+      Document,
+      Paragraph,
+      DocumentStartBackspaceExtension,
+      StarterKit.configure({
       }),
-      // 4. 代わりに、上で作ったカスタム版（<div>版）を追加する
-      CustomDivBlock,TrailingNode],
-    content: `<div>あいうえお</div>`,
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === 'title') {
+            return '新規ページ';
+          }
+          return '「/」から始める';
+        },
+      }),
+    ],
     immediatelyRender: false,
     editorProps: {
       attributes: {
@@ -52,11 +64,30 @@ export default function CustomEditor() {
         class: 'focus:outline-none', 
       },
     },
+    /*
     onUpdate: ({ editor }) => {
       const editorJson = editor.getJSON();
       debouncedSave(editorJson);
     },
+    */
   });
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 1. IME入力中（漢字変換中）のEnterキーは無視する
+    if (e.nativeEvent.isComposing) return
+
+    // 2. Enterキーが押された時の処理
+    if (e.key === 'Enter') {
+      e.preventDefault() // テキストエリアでの実際の改行を防ぐ
+
+      // 3. TiptapエディタのDOM要素を探してフォーカスを当てる
+      // Tiptapはデフォルトで contenteditable な要素に 'tiptap' というクラスを付与します
+      const tiptapEditor = document.querySelector('.tiptap') as HTMLElement
+      if (tiptapEditor) {
+        tiptapEditor.focus()
+      }
+    }
+  }
 
   useEffect(() => {
     if (!editor || !editorContainerRef.current) return;
@@ -116,7 +147,7 @@ export default function CustomEditor() {
   if (!editor) return null;
 
   return (
-    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl border border-white mx-auto mt-10 p-2">
+    <div ref={editorContainerRef} className="relative flex flex-col max-w-2xl mx-auto mt-10 p-2">
       {/* アクションボタン */}
       {buttonPos && (
         // 【修正ポイント】
@@ -143,6 +174,14 @@ export default function CustomEditor() {
       )}
 
       {/* エディタ本体 */}
+      <input
+        type="text"
+        placeholder="新規ページ"
+        autoFocus
+        onKeyDown={handleKeyDown}
+        id="notion-title-input"
+        className="w-full text-4xl caret-white placeholder-zinc-600 text-white font-bold text-gray-900 bg-transparent border-none outline-none placeholder-gray-300 mb-4"
+      />
       <EditorContent onClick={() => {setIsMenuBarOpen(false)}} editor={editor}/>
     </div>
   );

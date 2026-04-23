@@ -2,7 +2,8 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db, accounts, users } from "@/db/schema.tsx";
+import { accounts, users } from "@/db/schema/auth";
+import { db } from "@/db/db";
 import Resend from "resend";
 
 export const authOptions: NextAuthOptions = {
