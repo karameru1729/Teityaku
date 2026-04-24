@@ -3,11 +3,7 @@ import dynamic from 'next/dynamic';
 import { useEditor, EditorContent } from '@tiptap/react';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import StarterKit from '@tiptap/starter-kit';
-import EditorMenuBarWrapper from '@/../components/EditorMenuBarWrapper';
-import EditorMenuBar from '@/../components/EditorMenuBar';
-import EditorWrapper from '@/../components/EditorWrapper';
 import Editor from '@/../components/Editor';
-import TitleEditor from '@/../components/TitleEditor';
 
 // 非同期コンポーネントにするため `async` をつけます
 export default async function DocumentPage({params}: {params: Promise<{ id: string }>; }) 

@@ -1,4 +1,5 @@
-import SignInButton_Google from "@/../components/SignInButton_Google";
+import OAuthButton from "@/../components/OAuthButton";
+import GoogleIcon from "@/../public/icons/google.svg";
 
 export default function page (){
   return(
@@ -7,7 +8,7 @@ export default function page (){
         <div className="w-full max-w-[420px] bg-white border border-gray-200 rounded-[4px] shadow-sm relative z-10 mx-4">
             <div className="flex justify-center gap-[34px] pt-8 pb-6 px-8">
                 <div className="flex flex-col items-center gap-2">
-                  <SignInButton_Google/>
+                  <OAuthButton providerName="Google" icon={ <GoogleIcon className="h-5 w-5" /> } />
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <button className="w-[52px] h-[52px] border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
