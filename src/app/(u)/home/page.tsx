@@ -1,9 +1,8 @@
-import RecentAccessButton from "@/../components/RecentAccessButton";
-import auth from "@/auth";
 import SliderBar from "@/../components/SliderBar";
+import { auth } from "@/lib/auth";
 
 export default async function Home() {
-  const session = await auth(); 
+  const session = await auth();
 
   return(
     <div className="flex flex-col justify-start overflow-auto sideBar-scrollbar items-center sidebar-scrollbar bg-zinc-900">
@@ -12,15 +11,16 @@ export default async function Home() {
         <p className="text-xl py-2 select-none">最近のアクセス</p>
         <SliderBar/>
       </div>
-       {session?.user ? (
+       {session?.user?.name ? (
         <>
-          <p>{session.user.name} さんとしてログイン中</p>
+          <p>{session.user.id} さんとしてログイン中</p>
         </>
       ) : (
         <>
           <p>ログインしていません</p>
         </>
       )}
+      
     </div>
   );
 }

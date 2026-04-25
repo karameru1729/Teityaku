@@ -1,6 +1,6 @@
 'use server'
 
-import { db } from "@/db/db";
+import { db } from "@/db/adapter";
 import { documents } from '@/db/schema/documents';
 import { eq } from 'drizzle-orm';
 import { JSONContent } from '@tiptap/react';

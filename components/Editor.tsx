@@ -5,15 +5,11 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import Paragraph from '@tiptap/extension-paragraph';
-import { TrailingNode } from '@tiptap/extensions/trailing-node';
-import { drizzle } from 'drizzle-orm/libsql';
-import { documents } from '@/db/schema/documents';
-import { db } from "@/db/db";
+
 import { useDebouncedCallback } from 'use-debounce'; // 不足していたインポート
 import { updateDocument } from '@/app/actions'; // 作成したサーバーアクションをインポート
 import Document from '@tiptap/extension-document';
 import Placeholder from '@tiptap/extension-placeholder';
-import Heading from '@tiptap/extension-heading';
 import { DocumentStartBackspaceExtension } from './DocumentStartBackspaceExtension'
 
 const CustomDivBlock = Paragraph.extend({
@@ -72,7 +68,7 @@ export default function CustomEditor() {
     */
   });
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // 1. IME入力中（漢字変換中）のEnterキーは無視する
     if (e.nativeEvent.isComposing) return
 

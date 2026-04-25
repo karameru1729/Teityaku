@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import * as schema from "./schema"; // 以前作成したスキーマファイルをインポート
 
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL as string,

@@ -1,14 +1,13 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { ReactNode } from "react";
 
 interface OAuthButtonProps {
   providerName: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
-export default function SignInButton_Google({ providerName, icon }: OAuthButtonProps){
+export default function OAuthButton({ providerName, icon }: OAuthButtonProps){
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "http://localhost:3000/ishdia/home";
 
