@@ -1,6 +1,5 @@
 import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "next-auth/adapters";
-import { drizzle } from "drizzle-orm/libsql";
 
 // --- 既存の user テーブル ---
 export const users = sqliteTable("user", {
@@ -58,3 +57,5 @@ export const accounts = sqliteTable(
     }),
   })
 );
+
+export type User = typeof users.$inferSelect;

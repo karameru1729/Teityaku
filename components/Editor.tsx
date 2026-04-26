@@ -11,6 +11,7 @@ import { updateDocument } from '@/app/actions'; // 作成したサーバーア�
 import Document from '@tiptap/extension-document';
 import Placeholder from '@tiptap/extension-placeholder';
 import { DocumentStartBackspaceExtension } from './DocumentStartBackspaceExtension'
+import { User } from "@/db/schema";
 
 const CustomDivBlock = Paragraph.extend({
   // Tiptap内部での名前を 'paragraph' のままにしておくことで、
@@ -28,7 +29,7 @@ const CustomDivBlock = Paragraph.extend({
   },
 });
 
-export default function CustomEditor() {
+export default function CustomEditor({ user }: User) {
   const [buttonPos, setButtonPos] = useState<{ top: number; left: number } | null>(null);
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const editorContainerRef = useRef<HTMLDivElement>(null);

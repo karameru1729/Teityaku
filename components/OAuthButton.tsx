@@ -9,7 +9,7 @@ interface OAuthButtonProps {
 
 export default function OAuthButton({ providerName, icon }: OAuthButtonProps){
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "http://localhost:3000/ishdia/home";
+  const callbackUrl = searchParams.get("callbackUrl") || "http://localhost:3000/home";
 
   console.log(callbackUrl);
   return(
