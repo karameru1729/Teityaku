@@ -1,9 +1,7 @@
 import EditorMenuBarButton from "./EditorMenuBarButton";
-import homeIcon from "../public/icons/home.svg";
+import homeIcon from "@/../public/icons/home.svg";
 import { useState, useEffect } from "react";
-import { menuBarStateSelector } from './EditorMenuBarTextState'
-import { useEditorState } from '@tiptap/react'
-import type {Editor} from '@tiptap/core'
+import type {Editor} from '@tiptap/core';
 
 export function EditorMenuBarColor({editor, isOpen, resetSelectedButtonID}: {editor: Editor; isOpen: boolean; resetSelectedButtonID: boolean}){
      if (!editor) {
@@ -21,7 +19,7 @@ export function EditorMenuBarColor({editor, isOpen, resetSelectedButtonID}: {edi
         }
     }, [resetSelectedButtonID]);
     return(
-        <div className={`float-height bg-zinc-800 rounded-md border border-[#e2dadad6] items-center w-40 h-50 flex flex-col ${isOpen ? 'block' : 'hidden'}`}>
+        <div className={`float-height bg-zinc-800 rounded-md border border-[#e2dadad6] items-center w-80 h-100 flex flex-col ${isOpen ? 'block' : 'hidden'}`}>
             <div className="mt-2 overflow-auto sideBar-scrollbar">
                 {Buttons.map((button,index) => (
                     <EditorMenuBarButton

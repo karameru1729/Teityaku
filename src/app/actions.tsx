@@ -6,10 +6,10 @@ import { eq } from 'drizzle-orm';
 import { JSONContent } from '@tiptap/react';
 
 // データベースを更新するサーバーアクション
-export async function updateDocument(id: string, content: JSONContent) {
+export async function updateDocument(id: string, content: JSONContent, title: string) {
   try {
     await db.update(documents)
-      .set({ content })
+      .set({ content, title })
       .where(eq(documents.id, id));
   } catch (error) {
     console.error("Failed to update document:", error);

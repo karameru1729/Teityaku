@@ -1,37 +1,36 @@
 // app/documents/[id]/page.tsx
-import Editor from '@/../components/Editor';
+import Editor from '../../../../../components/editor/Editor';
 import { auth } from "@/lib/auth";
 import { db } from "@/db/adapter";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { drizzle } from "drizzle-orm/libsql";
 import { documents } from "@/db/schema/documents";
-import { users } from "@/db/schema/auth";
 
 // 非同期コンポーネントにするため `async` をつけます
-export default async function DocumentPage({params}: {params: Promise<{ id: string }>; }) 
+export default async function DocumentPage({params}: {params: Promise<{ documentId: string }>; }) 
 {
   // awaitを使ってURLのパラメータ（id）を取得する
-  const { id } = await params;
+  
   const session = await auth();
+  const { documentId } = await params;
 
   if (!session?.user?.id) {
     redirect("/signIn");
   }
 
-  const currentUser = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
-  });
-
-  if (!currentUser) {
-    redirect("/signIn");
-  }
-
-  const myDocument = await db.select().from(documents).where(eq(documents.id, session.user.id));
+  //　受け取ったdocumetnIdとユーザーIDを元に、ドキュメントをデータベースから取得する
+  const [myDocument] = await db.select()
+                               .from(documents)
+                               .where(
+                                and(
+                                  eq(documents.userId, session.user.id), 
+                                  eq(documents.id, documentId)
+                                )
+                              ).limit(1);
 
   return (
     <div className="p-8">
-      <Editor user={myDocument} />
+      <Editor myDocument={myDocument} />
     </div>
   );
 }

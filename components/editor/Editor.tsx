@@ -10,8 +10,8 @@ import { useDebouncedCallback } from 'use-debounce'; // 不足していたイン
 import { updateDocument } from '@/app/actions'; // 作成したサーバーアクションをインポート
 import Document from '@tiptap/extension-document';
 import Placeholder from '@tiptap/extension-placeholder';
-import { DocumentStartBackspaceExtension } from './DocumentStartBackspaceExtension'
-import { User } from "@/db/schema";
+import { DocumentStartBackspaceExtension } from '../DocumentStartBackspaceExtension'
+import { Mydocument } from "@/db/schema/documents";
 
 const CustomDivBlock = Paragraph.extend({
   // Tiptap内部での名前を 'paragraph' のままにしておくことで、
@@ -29,13 +29,15 @@ const CustomDivBlock = Paragraph.extend({
   },
 });
 
-export default function CustomEditor({ user }: User) {
+export default function CustomEditor({ myDocument }: { myDocument: Mydocument }) {
   const [buttonPos, setButtonPos] = useState<{ top: number; left: number } | null>(null);
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  const [title, setTitle] = useState<string>(myDocument?.title || ''); // タイトルの状態を追加
 
-  const debouncedSave = useDebouncedCallback(async (editorJson) => {
-    await updateDocument("34", editorJson);
+  //　ドキュメントの内容が更新された際に、変更内容をサーバに保存する関数
+  const debouncedSave = useDebouncedCallback(async (editorJson, titleText) => {
+    await updateDocument(myDocument.id, editorJson, titleText);
   }, 1000);
 
   const editor = useEditor({
@@ -61,12 +63,11 @@ export default function CustomEditor({ user }: User) {
         class: 'focus:outline-none', 
       },
     },
-    /*
+    content: myDocument?.content || '', // ドキュメントの内容を初期値としてセット
+    
     onUpdate: ({ editor }) => {
-      const editorJson = editor.getJSON();
-      debouncedSave(editorJson);
+      debouncedSave(editor.getJSON(), title);
     },
-    */
   });
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -85,6 +86,16 @@ export default function CustomEditor({ user }: User) {
       }
     }
   }
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    
+    setTitle(newTitle);           // ① 画面の表示を即座に更新する// ② 裏側のRefも最新の値に書き換える
+
+    // ③ タイトルが書き換えられた時も、エディターの最新状態と一緒に保存処理を走らせる
+    if (editor) {
+      debouncedSave(editor.getJSON(), newTitle);
+    }
+  };
 
   useEffect(() => {
     if (!editor || !editorContainerRef.current) return;
@@ -160,7 +171,7 @@ export default function CustomEditor({ user }: User) {
         >
           <div className="flex flex-row items-center gap-1">
             <button 
-              className="w-6 h-6 bg-zinc-700 rounded text-zinc-500 flex items-center justify-center cursor-grab hover:bg-zinc-600 transition-colors"
+              className="w-8 h-8 bg-zinc-700 rounded text-zinc-500 flex items-center justify-center cursor-grab hover:bg-zinc-600 transition-colors"
               onClick={() => setIsMenuBarOpen(!isMenuBarOpen)} // 確認用
             >
               ⋮⋮
@@ -175,6 +186,9 @@ export default function CustomEditor({ user }: User) {
         type="text"
         placeholder="新規ページ"
         autoFocus
+        autoComplete="off"
+        value={title} // ドキュメントのタイトルを初期値としてセット
+        onChange={handleTitleChange}
         onKeyDown={handleKeyDown}
         id="notion-title-input"
         className="w-full text-4xl caret-white placeholder-zinc-600 text-white font-bold text-gray-900 bg-transparent border-none outline-none placeholder-gray-300 mb-4"

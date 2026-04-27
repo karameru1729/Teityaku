@@ -9,5 +9,7 @@ export const documents = sqliteTable("documents", {
   // ★ポイント: mode: "json" を指定し、Tiptapの型を当てる
   content: text("content", { mode: "json" }).$type<JSONContent>(),
   userId: text("user_id").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).$defaultFn(() => new Date()),
 });
+
+export type Mydocument = typeof documents.$inferSelect;
