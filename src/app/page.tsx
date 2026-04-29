@@ -1,17 +1,13 @@
-import { createClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
-
-async function InstrumentsData() {
-  const supabase = await createClient();
-  const { data: instruments } = await supabase.from("instruments").select();
-
-  return <pre>{JSON.stringify(instruments, null, 2)}</pre>;
-}
 
 export default function Instruments() {
   return (
-    <Suspense fallback={<div>Loading instruments...</div>}>
-      <InstrumentsData />
-    </Suspense>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-4xl font-bold mb-4">Instruments</h1>
+      <p className="text-lg text-gray-600 mb-8">Explore our collection of musical instruments.</p>
+      <Suspense fallback={<div>Loading instruments...</div>}>
+        {/* Instrument list component goes here */}
+      </Suspense>
+    </div>
   );
 }

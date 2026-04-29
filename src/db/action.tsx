@@ -1,11 +1,9 @@
-// lib/actions.ts
 "use server";
 
 import { db } from "@/db/adapter";
 import { documents } from "@/db/schema/documents";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { integer } from "drizzle-orm/sqlite-core";
 
 export async function createDocument() {
   // 1. セッションからユーザーIDを取得（認証チェック）

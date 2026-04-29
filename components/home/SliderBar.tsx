@@ -1,13 +1,16 @@
 "use client"
 import { useRef, useState, useEffect } from "react";
 import HomeIcon from "@/../public/icons/document.svg";
+import { Mydocument } from "@/db/schema/documents";
+import { useRouter } from "next/navigation";
 
-export default function SliderBar() {
+export default function SliderBar({ mydocuments }: { mydocuments?: Mydocument[] }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerTargetleft = useRef<HTMLDivElement>(null);
   const observerTargetright = useRef<HTMLDivElement>(null);
   const [ isHiddenleft, setIshiddenleft ] = useState<boolean>(false);
   const [ isHiddenright, setIshiddenright ] = useState<boolean>(false);
+  const router = useRouter();
    
   useEffect(() => {
     const observerCallbackleft = (entries: IntersectionObserverEntry[]) => {
@@ -68,19 +71,20 @@ export default function SliderBar() {
 
       {/* ▼ ここからまとめた部分 ▼ */}
       <div style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} ref={scrollContainerRef} className="flex flex-row gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 hide-scrollbar">
-        {Array.from({ length: 10 }).map((_, index, arr) => {
+        {Array.from({ length: mydocuments?.length || 0 }).map((_, index, arr) => {
           // 最初と最後だけrefを設定、それ以外はnull
           const currentRef = index === 0 ? observerTargetleft : index === arr.length - 1 ? observerTargetright : null;
 
           return (
             <div 
-              key={index} 
+              key={index}
+              onClick={() => {router.push(`/documents/${mydocuments?.[index]?.id}`)}} 
               ref={currentRef} 
               className="flex flex-col shrink-0 my-2 justify-start bg-zinc-800 border-transparent rounded-xl w-48 h-48 border"
             > 
               <HomeIcon width={36} height={36} fill="#e2dadad6" className="m-4"/> 
-              <p className="text-xl mx-2 select-none">ドキュメント</p>
-              <p className="text-md mt-10 ml-2 select-none">1日前</p>
+              <p className="text-xl mx-2 select-none">{mydocuments?.[index]?.title || "無題"}</p>
+              <p className="text-md mt-10 ml-2 select-none">{mydocuments?.[index]?.createdAt?.toLocaleDateString() || "日付不明"}</p>
             </div>
           );
         })}

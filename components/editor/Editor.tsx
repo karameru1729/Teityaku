@@ -5,7 +5,6 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import Paragraph from '@tiptap/extension-paragraph';
-
 import { useDebouncedCallback } from 'use-debounce'; // 不足していたインポート
 import { updateDocument } from '@/app/actions'; // 作成したサーバーアクションをインポート
 import Document from '@tiptap/extension-document';
@@ -64,13 +63,14 @@ export default function CustomEditor({ myDocument }: { myDocument: Mydocument })
       },
     },
     content: myDocument?.content || '', // ドキュメントの内容を初期値としてセット
-    
+    /*
     onUpdate: ({ editor }) => {
       debouncedSave(editor.getJSON(), title);
     },
+    */
   });
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // 1. IME入力中（漢字変換中）のEnterキーは無視する
     if (e.nativeEvent.isComposing) return
 
@@ -86,7 +86,7 @@ export default function CustomEditor({ myDocument }: { myDocument: Mydocument })
       }
     }
   }
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newTitle = e.target.value;
     
     setTitle(newTitle);           // ① 画面の表示を即座に更新する// ② 裏側のRefも最新の値に書き換える
@@ -152,6 +152,22 @@ export default function CustomEditor({ myDocument }: { myDocument: Mydocument })
     };
   }, [editor,isMenuBarOpen]);
 
+  useEffect(() => {
+    // 戻る/進むボタンが押された時に実行される関数
+    const handlePopState = (event: PopStateEvent) => {
+      console.log("戻る（または進む）ボタンが押されました！");
+      updateDocument(myDocument.id, editor?.getJSON() || { type: 'doc', content: [] }, title); // ドキュメントの内容とタイトルを保存
+    };
+
+    // イベントリスナーを登録
+    window.addEventListener("popstate", handlePopState);
+
+    // クリーンアップ関数（コンポーネントが破棄される時にリスナーを解除）
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   if (!editor) return null;
 
   return (
@@ -182,8 +198,7 @@ export default function CustomEditor({ myDocument }: { myDocument: Mydocument })
       )}
 
       {/* エディタ本体 */}
-      <input
-        type="text"
+      <textarea
         placeholder="新規ページ"
         autoFocus
         autoComplete="off"
@@ -191,7 +206,7 @@ export default function CustomEditor({ myDocument }: { myDocument: Mydocument })
         onChange={handleTitleChange}
         onKeyDown={handleKeyDown}
         id="notion-title-input"
-        className="w-full text-4xl caret-white placeholder-zinc-600 text-white font-bold text-gray-900 bg-transparent border-none outline-none placeholder-gray-300 mb-4"
+        className="auto-wrap-input w-full text-4xl caret-white placeholder-zinc-600 text-white font-bold text-gray-900 bg-transparent border-none outline-none placeholder-gray-300 mb-4"
       />
       <EditorContent onClick={() => {setIsMenuBarOpen(false)}} editor={editor}/>
     </div>

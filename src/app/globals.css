@@ -41,6 +41,15 @@ body {
   }
 }
 
+.auto-wrap-input {
+  width: 100%;
+  min-height: 40px; /* 最小の高さ（1行分） */
+  resize: none;
+  
+  /* 入力内容に合わせてサイズを自動調整 */
+  field-sizing: content; 
+}
+
 .ProseMirror h1 {
   font-size: 2rem;
   line-height: 1.2;
